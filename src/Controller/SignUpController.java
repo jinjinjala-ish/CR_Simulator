@@ -131,7 +131,7 @@ public class SignUpController implements ActionListener {
         String mailPassword = "****"; // 구글계정 비밀번호
 
         String fromName = "관리자";
-        String fromEmail = "sejong@gmail.com"; // 보내는 사람 메일
+        String fromEmail = "schsch@gmail.com"; // 보내는 사람 메일
         String toName = "회원";
         String toEmail = signUpView.getEmail(); // 받는사람메일
         String mailTitle = "회원가입 인증 코드 발급 안내 입니다.";
