@@ -192,6 +192,32 @@ public class DAO {
         return false;
     }
 
+
+// 강의가 취소된 자리인지 서버에 확인
+    public boolean isCancelledSeat(String courseNum) {
+        String route = "lecture/cancelled/" + courseNum;
+        JSONObject jsonObject = sendGet(Constants.BASE_URL + route);
+
+        if (jsonObject == null) return false;
+        return jsonObject.get(Constants.SUCCESS_TXT).equals(Constants.TRUE_TXT);
+    }
+
+    // 강의 신청 시 임시 보류 처리 포함
+    public boolean applyLectureWithHold(UserDTO user, LectureDTO lecture) {
+        String route = "reg/hold";
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(Constants.ID_TXT, user.getId());
+        jsonObject.put(Constants.COURSENUM_TXT, lecture.getCourseNum());
+        jsonObject.put(Constants.CLASSNUM_TXT, lecture.getClassNum());
+
+        jsonObject = sendRequest(Constants.BASE_URL + route, jsonObject.toString(), Constants.PUT_TXT);
+
+        if (jsonObject == null) return false;
+        return jsonObject.get(Constants.SUCCESS_TXT).equals(Constants.TRUE_TXT);
+    }
+
+
+    
     // 정보수정
     public boolean modifyState(UserDTO user){
         String route = "user";
