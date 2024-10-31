@@ -29,12 +29,59 @@ public class FilterController implements ActionListener {
             case Constants.SEARCH_TXT:
                 searchFunction();
                 break;
+                case Constants.APPLY_LECTURE_TXT:
+                applyLectureWithWarning();  // 신청 시 경고 및 보류 처리
+                break;
             case Constants.EXIT_TXT:
                 ClassManager.getInstance().getMain().comeToMain();
                 break;
         }
     }
 
+   // 강의 신청 시 취소석 여부 확인 및 경고 처리
+    private void applyLectureWithWarning() {
+        LectureDTO lecture = filterView.getSelectedLecture();
+        if (lecture == null) {
+            JOptionPane.showMessageDialog(null, "선택된 강의가 없습니다.");
+            return;
+        }
+
+        // 서버로부터 해당 강의가 취소된 자리인지 여부 확인
+        boolean isCancelledSeat = ClassManager.getInstance()
+            .getDAO().isCancelledSeat(lecture.getCourseNum());
+
+        if (isCancelledSeat) {
+            int response = JOptionPane.showConfirmDialog(null, 
+                "이 강의는 취소된 자리입니다. 신청을 진행하시겠습니까?", 
+                "취소석 경고", JOptionPane.YES_NO_OPTION);
+            if (response != JOptionPane.YES_OPTION) return;  // 신청 취소
+        }
+
+        // 신청을 진행하며 임시 보류 처리 시작
+        boolean success = ClassManager.getInstance()
+            .getDAO().applyLectureWithHold(ClassManager.getInstance().getUser(), lecture);
+
+        if (success) {
+            JOptionPane.showMessageDialog(null, "수강 신청이 완료되었습니다.");
+        } else {
+            JOptionPane.showMessageDialog(null, "수강 신청에 실패했습니다. 다시 시도해주세요.");
+        }
+    }
+
+    // 기존과 동일한 필터 검색 기능
+    private void searchFunction() {
+        // 필터 조건 JSON 생성 및 강의 목록 검색
+        JSONObject jsonObject = new JSONObject();
+        if (!filterView.getMajor().isEmpty())
+            jsonObject.put(Constants.MAJOR_TXT, filterView.getMajor());
+    
+
+        ClassManager.getInstance().getMain()
+            .changePanel(ClassManager.getInstance().getLectureListView(jsonObject));
+    }
+}
+    
+    
     //필터를 정리 후 서치를 하는 메소드
     private void searchFunction(){
         JSONObject jsonObject = new JSONObject();
