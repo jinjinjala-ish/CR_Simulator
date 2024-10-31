@@ -21,7 +21,7 @@ public class TimeDTO {
         this.startMinute = startMinute;
         this.endHour = endHour;
         this.endMinute = endMinute;
-    } //public TimeDTO(int startHour, int startMinute, int endHour, int endMinute)
+    } 
 
     public TimeDTO(String day, int startHour, int startMinute, int endHour, int endMinute){
         this.Day = day;     // 요일
@@ -37,7 +37,7 @@ public class TimeDTO {
             return startHour * 60 + startMinute;
 
         return endHour * 60 + endMinute;
-    } //public int ToMinute(boolean isStartTime)
+    } 
 
     // 현재 시간이 수업시간 안에 포함되는 시간인지 확인
     public boolean isInTime(TimeDTO time){
@@ -49,5 +49,5 @@ public class TimeDTO {
         int periodEnd = 60 * endHour + endMinute;
 
         return (timeStart <= periodStart) && (timeEnd >= periodEnd);
-    } //public boolean isInTime(TimeDTO time)
+    }
 }
