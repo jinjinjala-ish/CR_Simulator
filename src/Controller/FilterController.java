@@ -68,6 +68,21 @@ public class FilterController implements ActionListener {
         }
     }
 
+public class LectureQueueController implements ActionListener {
+    public void actionPerformed(ActionEvent e) {
+        if (e.getActionCommand().equals("Add to Queue")) {
+            // 대기열 등록 호출
+            if (ClassManager.getInstance().getDAO().addLectureToQueue(user, lecture)) {
+                JOptionPane.showMessageDialog(null, "대기열에 등록되었습니다.");
+            } else {
+                JOptionPane.showMessageDialog(null, "대기열 등록 실패.");
+            }
+        }
+    }
+}
+
+
+    
     // 기존과 동일한 필터 검색 기능
     private void searchFunction() {
         // 필터 조건 JSON 생성 및 강의 목록 검색
