@@ -216,6 +216,16 @@ public class DAO {
         return jsonObject.get(Constants.SUCCESS_TXT).equals(Constants.TRUE_TXT);
     }
 
+    //큐
+public boolean addLectureToQueue(UserDTO user, LectureDTO lecture) {
+    String route = "queue/add";
+    JSONObject jsonObject = new JSONObject();
+    jsonObject.put("userId", user.getId());
+    jsonObject.put("courseNum", lecture.getCourseNum());
+
+    jsonObject = sendRequest(Constants.BASE_URL + route, jsonObject.toString(), Constants.POST_TXT);
+    return jsonObject != null && jsonObject.get("success").equals("true");
+}
 
     
     // 정보수정
