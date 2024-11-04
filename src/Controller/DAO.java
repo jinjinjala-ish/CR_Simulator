@@ -264,6 +264,34 @@ public class DAO {
         return user;
     }
 
+ // 강의를 대기열에 추가하는 메서드
+    public boolean addLectureToQueue(UserDTO user, LectureDTO lecture) {
+        String route = "queue/add";
+        JSONObject jsonObject = new JSONObject();
+
+        jsonObject.put(Constants.ID_TXT, user.getId());
+        jsonObject.put(Constants.COURSENUM_TXT, lecture.getCourseNum());
+        jsonObject.put(Constants.CLASSNUM_TXT, lecture.getClassNum());
+
+        jsonObject = sendRequest(Constants.BASE_URL + route, jsonObject.toString(), Constants.POST_TXT);
+
+        return jsonObject != null && jsonObject.get(Constants.SUCCESS_TXT).equals(Constants.TRUE_TXT);
+    }
+
+    // 사용자 대기열 상태를 조회하는 메서드
+    public ArrayList<QueueDTO> getUserQueueStatus(UserDTO user) {
+        String route = "queue/status/" + user.getId();
+        JSONArray resultData = sendGetAtArray(Constants.BASE_URL + route);
+        ArrayList<QueueDTO> queueData = new ArrayList<>();
+
+        if (resultData == null || resultData.size() < 1) return queueData;
+
+        for (Object obj : resultData) {
+            queueData.add(new QueueDTO((JSONObject) obj));
+        }
+        return queueData;
+    }
+    
     //서버에 리퀘스트를 보낸 후 받는 메소드
     public JSONObject sendRequest(String strUrl, String jsonMessage, String quary){
         try {
