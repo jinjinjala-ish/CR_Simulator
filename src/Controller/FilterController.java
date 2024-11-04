@@ -80,7 +80,20 @@ public class LectureQueueController implements ActionListener {
         }
     }
 }
+//알림시스템
+public void notifyUser(String message) {
+    JOptionPane.showMessageDialog(null, message);
+}
 
+public void actionPerformed(ActionEvent e) {
+    if (e.getActionCommand().equals("Apply Lecture")) {
+        if (ClassManager.getInstance().getDAO().applyLectureWithHold(user, lecture)) {
+            notifyUser("수강 신청 성공!");
+        } else {
+            notifyUser("수강 신청 실패.");
+        }
+    }
+}
 
     
     // 기존과 동일한 필터 검색 기능
